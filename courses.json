@@ -1,0 +1,1 @@
+[{"courseId":"C1","title":"course1","description":"c1","instructorId":"U1","lessons":[{"lessonId":"L1","title":"Lesson1","content":"L1","resources":[]},{"lessonId":"L2","title":"Lesson3","content":"L3","resources":[]}],"students":["U2"]}]

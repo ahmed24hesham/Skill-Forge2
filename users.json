@@ -1,0 +1,1 @@
+[{"userId":"U1","role":"Instructor","username":"ahmed","email":"ahmed@gmail.com","passwordHash":"df8e7c6127e87fb73d95121c1d2928b743cab6296ba2fb77ff3a368c8f895c06"},{"enrolledCourses":["C1"],"completedLessons":["L1"],"userId":"U2","role":"Student","username":"ali","email":"ali@gmail.com","passwordHash":"39ea8705922d7431ef9820b733ee11fe090e0ee226e510b2ae7f6f6631b9e7b5"}]
