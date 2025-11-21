@@ -15,6 +15,7 @@ public class Quiz {
             return true;
         }
         return false;
+        
     }
 
     public ArrayList<Question> getQuestions() { return questions; }
