@@ -8,8 +8,8 @@ public class Lesson {
     private String title;
     private String content;
     private ArrayList<String> resources;   // for optional material you wanna add
-
-    public Lesson( String title, String content) {
+    private Quiz quiz;
+    public Lesson( String title, String content,Quiz quiz) {
         IDGenerator idd = new IDGenerator();
         
             this.lessonId = idd.generateLessonId();
@@ -18,6 +18,7 @@ public class Lesson {
         this.title = title;
         this.content = content;
         this.resources = new ArrayList<>(); 
+        this.quiz=quiz;
     }
 
     public Lesson() {
@@ -31,7 +32,12 @@ public class Lesson {
     public void setLessonId(String lessonId) {
         this.lessonId = lessonId;
     }
-
+    public void setQuiz(Quiz quiz){
+    this.quiz=quiz;
+    }
+    public Quiz getQuiz(){
+    return quiz;
+    }
     public String getTitle() {
         return title;
     }

@@ -83,7 +83,7 @@ public class Instructor extends User {
         courseDB.save(list);
     }
 
-    public void editLesson(String cID, String lID, String newTitle, String newContent, String newLessonId) {
+    public void editLesson(String cID, String lID, String newTitle, String newContent, String newLessonId,Quiz q) {
         ArrayList<Course> list = courseDB.load();
         for (Course c : list) {
             if (c.getCourseId().equals(cID)) {
@@ -92,6 +92,7 @@ public class Instructor extends User {
                         if (newTitle != null && !newTitle.trim().isEmpty()) l.setTitle(newTitle);
                         if (newContent != null) l.setContent(newContent);
                         if (newLessonId != null && newLessonId.matches("L\\d+")) l.setLessonId(newLessonId);
+                        if(q!=null)l.setQuiz(q);
                     }
                 }
             }

@@ -116,6 +116,25 @@ private void loadLessons() {
 
     JOptionPane.showMessageDialog(this, sb.toString());
 }
+   private void viewCourseDescription() {
+
+    if (selectedCourse == null) {
+        JOptionPane.showMessageDialog(this, "Select a course first.");
+        return;
+    }
+        JOptionPane.showMessageDialog(this,selectedCourse.getDescription());
+  
+}
+    private void viewLessonContent() {
+       Lesson selectedLesson = lessonList.getSelectedValue();
+    if (selectedLesson == null) {
+        JOptionPane.showMessageDialog(this, "Select a Lesson first.");
+        return;
+    }
+        JOptionPane.showMessageDialog(this,selectedLesson.getContent());
+  
+}
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -134,6 +153,9 @@ private void loadLessons() {
         btnLogOut = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(0, 0, 0));
 
@@ -241,6 +263,30 @@ private void loadLessons() {
         jLabel2.setForeground(new java.awt.Color(255, 102, 0));
         jLabel2.setText("Lessons");
 
+        jButton1.setBackground(new java.awt.Color(255, 102, 0));
+        jButton1.setText("Course Description");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setBackground(new java.awt.Color(255, 102, 0));
+        jButton2.setText("Lesson Content");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setBackground(new java.awt.Color(255, 102, 0));
+        jButton3.setText("Show Quiz");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -255,9 +301,9 @@ private void loadLessons() {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(8, 8, 8)
                                 .addComponent(btnRefreshCourses))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(create)
-                                .addGap(49, 49, 49)))))
+                            .addComponent(create))
+                        .addGap(33, 33, 33)
+                        .addComponent(jButton1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(LessonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(7, Short.MAX_VALUE))
@@ -281,12 +327,17 @@ private void loadLessons() {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(ViewEnrolledStudents)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(editLesson))
+                                .addComponent(editLesson)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton3)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(AddLesson)
                                 .addGap(18, 18, 18)
-                                .addComponent(DeleteLesson)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addComponent(DeleteLesson)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton2)
+                                .addGap(41, 41, 41))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -314,11 +365,14 @@ private void loadLessons() {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(edit)
                             .addComponent(AddLesson)
-                            .addComponent(DeleteLesson))
+                            .addComponent(DeleteLesson)
+                            .addComponent(jButton2))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(ViewEnrolledStudents)
-                            .addComponent(editLesson))
+                            .addComponent(editLesson)
+                            .addComponent(jButton1)
+                            .addComponent(jButton3))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -394,22 +448,86 @@ selectedCourse = null;
 
     private void AddLessonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddLessonActionPerformed
         // TODO add your handling code here:
-        if (selectedCourse == null) {
-    JOptionPane.showMessageDialog(this, "Select a course first.");
-    return;
-}
+  if (selectedCourse == null) {
+        JOptionPane.showMessageDialog(this, "Select a course first.");
+        return;
+    }
 
-String title = JOptionPane.showInputDialog("Lesson Title:");
-String content = JOptionPane.showInputDialog("Lesson Content:");
+    String title = JOptionPane.showInputDialog("Lesson Title:");
+    String content = JOptionPane.showInputDialog("Lesson Content:");
+    String numberofQuestions = JOptionPane.showInputDialog("Number of Questions in Quiz:");
 
-if (title == null || title.isBlank()) return;
+    if (title == null || title.isBlank()) return;
 
-Lesson l = new Lesson(title, content);
-for (Instructor i : list) {
-            if (i.getUsername().trim().equals(username)) {
-                i.addLesson(selectedCourse.getCourseId(), l);
-            }}
-loadLessons();
+    int qCount = Integer.parseInt(numberofQuestions);
+
+    BackEnd.Quiz quiz = new BackEnd.Quiz(qCount);
+
+    for (int i = 0; i < qCount; i++) {
+
+        String text = JOptionPane.showInputDialog("Question " + (i + 1) + ":");
+
+        String choice1 = JOptionPane.showInputDialog("Choice A:");
+        String choice2 = JOptionPane.showInputDialog("Choice B:");
+        String choice3 = JOptionPane.showInputDialog("Choice C:");
+        String choice4 = JOptionPane.showInputDialog("Choice D:");
+
+        ArrayList<BackEnd.Choice> choices = new ArrayList<>();
+        choices.add(new BackEnd.Choice(choice1));
+        choices.add(new BackEnd.Choice(choice2));
+        choices.add(new BackEnd.Choice(choice3));
+        choices.add(new BackEnd.Choice(choice4));
+
+        // Create radio buttons
+        JRadioButton a = new JRadioButton("A");
+        JRadioButton b = new JRadioButton("B");
+        JRadioButton c = new JRadioButton("C");
+        JRadioButton d = new JRadioButton("D");
+
+        a.setActionCommand("A");
+        b.setActionCommand("B");
+        c.setActionCommand("C");
+        d.setActionCommand("D");
+
+        ButtonGroup group = new ButtonGroup();
+        group.add(a);
+        group.add(b);
+        group.add(c);
+        group.add(d);
+
+        JPanel panel = new JPanel(new GridLayout(0, 1));
+        panel.add(new JLabel("Choose Correct Answer:"));
+        panel.add(a);
+        panel.add(b);
+        panel.add(c);
+        panel.add(d);
+
+        int result = JOptionPane.showConfirmDialog(null, panel, 
+                "Select Correct Answer", JOptionPane.OK_CANCEL_OPTION);
+
+        String letter = null;
+
+        if (result == JOptionPane.OK_OPTION && group.getSelection() != null) {
+            letter = group.getSelection().getActionCommand();  // A/B/C/D
+        } else {
+            JOptionPane.showMessageDialog(this, "You must select a correct answer!");
+            i--; // repeat this question again
+            continue;
+        }
+
+        BackEnd.Question question = new BackEnd.Question(text, choices, letter);
+        quiz.addQuestion(question);
+    }
+
+    Lesson l = new Lesson(title, content, quiz);
+
+    for (Instructor instructor : list) {
+        if (instructor.getUsername().trim().equals(username)) {
+            instructor.addLesson(selectedCourse.getCourseId(), l);
+        }
+    }
+
+    loadLessons();
     }//GEN-LAST:event_AddLessonActionPerformed
 
     private void DeleteLessonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteLessonActionPerformed
@@ -447,7 +565,69 @@ if (selectedCourse == null || selectedLesson == null) {
 
 String newTitle = JOptionPane.showInputDialog("New Title:", selectedLesson.getTitle());
 String newContent = JOptionPane.showInputDialog("New Content:", selectedLesson.getContent());
+String numberofQuestions = JOptionPane.showInputDialog("Number of Questions in Quiz:");
 
+    if (newTitle == null || newTitle.isBlank()) return;
+
+    int qCount = Integer.parseInt(numberofQuestions);
+
+    BackEnd.Quiz quiz = new BackEnd.Quiz(qCount);
+
+    for (int i = 0; i < qCount; i++) {
+
+        String text = JOptionPane.showInputDialog("Question " + (i + 1) + ":");
+
+        String choice1 = JOptionPane.showInputDialog("Choice A:");
+        String choice2 = JOptionPane.showInputDialog("Choice B:");
+        String choice3 = JOptionPane.showInputDialog("Choice C:");
+        String choice4 = JOptionPane.showInputDialog("Choice D:");
+
+        ArrayList<BackEnd.Choice> choices = new ArrayList<>();
+        choices.add(new BackEnd.Choice(choice1));
+        choices.add(new BackEnd.Choice(choice2));
+        choices.add(new BackEnd.Choice(choice3));
+        choices.add(new BackEnd.Choice(choice4));
+
+        // Create radio buttons
+        JRadioButton a = new JRadioButton("A");
+        JRadioButton b = new JRadioButton("B");
+        JRadioButton c = new JRadioButton("C");
+        JRadioButton d = new JRadioButton("D");
+
+        a.setActionCommand("A");
+        b.setActionCommand("B");
+        c.setActionCommand("C");
+        d.setActionCommand("D");
+
+        ButtonGroup group = new ButtonGroup();
+        group.add(a);
+        group.add(b);
+        group.add(c);
+        group.add(d);
+
+        JPanel panel = new JPanel(new GridLayout(0, 1));
+        panel.add(new JLabel("Choose Correct Answer:"));
+        panel.add(a);
+        panel.add(b);
+        panel.add(c);
+        panel.add(d);
+
+        int result = JOptionPane.showConfirmDialog(null, panel, 
+                "Select Correct Answer", JOptionPane.OK_CANCEL_OPTION);
+
+        String letter = null;
+
+        if (result == JOptionPane.OK_OPTION && group.getSelection() != null) {
+            letter = group.getSelection().getActionCommand();  // A/B/C/D
+        } else {
+            JOptionPane.showMessageDialog(this, "You must select a correct answer!");
+            i--; // repeat this question again
+            continue;
+        }
+
+        BackEnd.Question question = new BackEnd.Question(text, choices, letter);
+        quiz.addQuestion(question);
+    }
 for (Instructor i : list) {
             if (i.getUsername().trim().equals(username)) {
                 i.editLesson(
@@ -455,7 +635,8 @@ for (Instructor i : list) {
         selectedLesson.getLessonId(),
         newTitle,
         newContent,
-        selectedLesson.getLessonId()
+        selectedLesson.getLessonId(),
+        quiz
 );
             }}
 
@@ -474,6 +655,64 @@ loadLessons();
     mainFrame.repaint();
     }//GEN-LAST:event_btnLogOutActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        viewLessonContent();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+viewCourseDescription();        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        Lesson selectedLesson = lessonList.getSelectedValue();
+if (selectedCourse == null || selectedLesson == null) {
+    JOptionPane.showMessageDialog(this, "Select a lesson first.");
+    return;
+}
+ BackEnd.Quiz quiz = selectedLesson.getQuiz();
+    if (quiz == null || quiz.getQuestions().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "This lesson has no quiz.");
+        return;
+    }
+
+    JPanel mainPanel = new JPanel();
+    mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+
+    for (int i = 0; i < quiz.getQuestions().size(); i++) {
+        BackEnd.Question q = quiz.getQuestions().get(i);
+
+        mainPanel.add(new JLabel((i + 1) + ". " + q.getText()));
+
+        ArrayList<BackEnd.Choice> choices = q.getChoices();
+
+        ButtonGroup group = new ButtonGroup();
+        JPanel choicePanel = new JPanel(new GridLayout(0, 1));
+
+        char option = 'A';
+        for (BackEnd.Choice choice : choices) {
+            JRadioButton radio = new JRadioButton(option + ") " + choice.getText());
+            radio.setEnabled(false); // make it read-only
+            if (option == q.getCorrectAnswerLetter().charAt(0)) {
+                radio.setSelected(true); // mark the correct answer
+            }
+            group.add(radio);
+            choicePanel.add(radio);
+            option++;
+        }
+
+        mainPanel.add(choicePanel);
+        mainPanel.add(Box.createVerticalStrut(10)); // spacing between questions
+    }
+
+    JScrollPane scrollPane = new JScrollPane(mainPanel);
+    scrollPane.setPreferredSize(new Dimension(400, 300));
+
+    JOptionPane.showMessageDialog(this, scrollPane, "Quiz Details", JOptionPane.INFORMATION_MESSAGE);
+
+    }//GEN-LAST:event_jButton3ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddLesson;
@@ -487,6 +726,9 @@ loadLessons();
     private javax.swing.JButton delete;
     private javax.swing.JButton edit;
     private javax.swing.JButton editLesson;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
