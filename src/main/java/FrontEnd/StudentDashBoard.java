@@ -179,6 +179,7 @@ loadCourses();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         ViewLessonContent = new javax.swing.JButton();
+        btnTakeQuiz = new javax.swing.JButton();
 
         StudentDashBoard.setBackground(new java.awt.Color(0, 0, 0));
         StudentDashBoard.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -282,6 +283,14 @@ loadCourses();
             }
         });
 
+        btnTakeQuiz.setBackground(new java.awt.Color(255, 102, 0));
+        btnTakeQuiz.setText("Take Quiz");
+        btnTakeQuiz.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTakeQuizActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout StudentDashBoardLayout = new javax.swing.GroupLayout(StudentDashBoard);
         StudentDashBoard.setLayout(StudentDashBoardLayout);
         StudentDashBoardLayout.setHorizontalGroup(
@@ -306,24 +315,27 @@ loadCourses();
                                 .addGap(142, 142, 142)
                                 .addComponent(jLabel3)))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(StudentDashBoardLayout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, StudentDashBoardLayout.createSequentialGroup()
                         .addGroup(StudentDashBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2)
                             .addGroup(StudentDashBoardLayout.createSequentialGroup()
-                                .addComponent(btnRefresh)
+                                .addGroup(StudentDashBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel2)
+                                    .addGroup(StudentDashBoardLayout.createSequentialGroup()
+                                        .addComponent(btnRefresh)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnMarkComplete)
+                                        .addGap(32, 32, 32)
+                                        .addComponent(lblProgress)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnTakeQuiz))
+                            .addGroup(StudentDashBoardLayout.createSequentialGroup()
+                                .addComponent(btnEnroll)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnMarkComplete)
-                                .addGap(32, 32, 32)
-                                .addComponent(lblProgress)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(StudentDashBoardLayout.createSequentialGroup()
-                        .addComponent(btnEnroll)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnViewLessons)
-                        .addGap(79, 79, 79)
-                        .addComponent(btnLogOut)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ViewLessonContent)
+                                .addComponent(btnViewLessons)
+                                .addGap(79, 79, 79)
+                                .addComponent(btnLogOut)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(ViewLessonContent)))
                         .addGap(58, 58, 58))))
         );
         StudentDashBoardLayout.setVerticalGroup(
@@ -348,7 +360,8 @@ loadCourses();
                 .addGroup(StudentDashBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnMarkComplete)
                     .addComponent(btnRefresh)
-                    .addComponent(lblProgress))
+                    .addComponent(lblProgress)
+                    .addComponent(btnTakeQuiz))
                 .addGap(8, 8, 8))
         );
 
@@ -444,6 +457,28 @@ if (!loggedStudent.getEnrolledCourses().contains(selectedCourse.getCourseId())) 
         viewLessonContent();
     }//GEN-LAST:event_ViewLessonContentActionPerformed
 
+    private void btnTakeQuizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTakeQuizActionPerformed
+        // TODO add your handling code here:
+        selectedLesson = listLessons.getSelectedValue();
+        selectedCourse = listEnrolled.getSelectedValue();
+
+    if (selectedCourse == null) {
+        JOptionPane.showMessageDialog(this, "Select a course first.");
+        return;
+    }
+
+    if (selectedLesson == null) {
+        JOptionPane.showMessageDialog(this, "Select a lesson first.");
+        return;
+    }
+
+    // Open QuizPanel inside MainFrame
+    MainFrame frame = (MainFrame) SwingUtilities.getWindowAncestor(this);
+    frame.setContentPane(new Quiz(selectedLesson, loggedStudent, selectedCourse));
+    frame.revalidate();
+    frame.repaint();
+    }//GEN-LAST:event_btnTakeQuizActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel StudentDashBoard;
@@ -452,6 +487,7 @@ if (!loggedStudent.getEnrolledCourses().contains(selectedCourse.getCourseId())) 
     private javax.swing.JButton btnLogOut;
     private javax.swing.JButton btnMarkComplete;
     private javax.swing.JButton btnRefresh;
+    private javax.swing.JButton btnTakeQuiz;
     private javax.swing.JButton btnViewLessons;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

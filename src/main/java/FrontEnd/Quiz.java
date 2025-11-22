@@ -10,75 +10,123 @@ public class Quiz extends JPanel {
 
     private Lesson lesson;
     private Srudent student;
+    private Course course;
     private QuizEngine quizEngine;
 
     private ArrayList<JRadioButton[]> optionButtons;
+    private JButton btnSubmit;
+    private JLabel lblTitle;
+    private JPanel questionsPanel;
 
-    public Quiz(Lesson lesson, Srudent student) {
-
+    public Quiz(Lesson lesson, Srudent student, Course course) {
         this.lesson = lesson;
         this.student = student;
-        quizEngine = new QuizEngine();
+        this.course = course;
+        this.quizEngine = new QuizEngine();
+        this.optionButtons = new ArrayList<>();
 
+        initUI();
+    }
+
+    private void initUI() {
         setLayout(new BorderLayout());
+        setBackground(Color.BLACK);
 
-        JPanel quizArea = new JPanel();
-        quizArea.setLayout(new BoxLayout(quizArea, BoxLayout.Y_AXIS));
+        lblTitle = new JLabel("Quiz for: " + lesson.getTitle());
+        lblTitle.setForeground(Color.ORANGE);
+        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
 
-        optionButtons = new ArrayList<>();
+        add(lblTitle, BorderLayout.NORTH);
 
-        for (Question q : lesson.getQuiz().getQuestions()) {
-            quizArea.add(new JLabel("Q: " + q.getText()));
+        questionsPanel = new JPanel();
+        questionsPanel.setLayout(new BoxLayout(questionsPanel, BoxLayout.Y_AXIS));
+        questionsPanel.setBackground(Color.BLACK);
+
+        // Load questions
+        BackEnd.Quiz quiz = lesson.getQuiz();
+
+        for (Question q : quiz.getQuestions()) {
+            JLabel lblQ = new JLabel("Q: " + q.getText());
+            lblQ.setForeground(Color.WHITE);
+            lblQ.setFont(new Font("Segoe UI", Font.BOLD, 16));
+            questionsPanel.add(lblQ);
 
             ButtonGroup group = new ButtonGroup();
             JRadioButton[] btns = new JRadioButton[q.getChoices().size()];
 
             for (int i = 0; i < q.getChoices().size(); i++) {
                 btns[i] = new JRadioButton(q.getChoices().get(i).getText());
+                btns[i].setForeground(Color.LIGHT_GRAY);
+                btns[i].setBackground(Color.BLACK);
+
                 group.add(btns[i]);
-                quizArea.add(btns[i]);
+                questionsPanel.add(btns[i]);
             }
 
             optionButtons.add(btns);
-            quizArea.add(Box.createRigidArea(new Dimension(0, 10)));
+            questionsPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         }
 
-        JButton submitBtn = new JButton("Submit Quiz");
+        add(new JScrollPane(questionsPanel), BorderLayout.CENTER);
 
-        submitBtn.addActionListener(e -> submitQuiz());
+        btnSubmit = new JButton("Submit Quiz");
+        btnSubmit.setBackground(Color.ORANGE);
+        btnSubmit.addActionListener(e -> submitQuiz());
 
-        add(new JScrollPane(quizArea), BorderLayout.CENTER);
-        add(submitBtn, BorderLayout.SOUTH);
+        add(btnSubmit, BorderLayout.SOUTH);
     }
 
     private void submitQuiz() {
-
         ArrayList<String> answers = new ArrayList<>();
 
+        // Collect student answers
         for (JRadioButton[] btns : optionButtons) {
+            boolean answered = false;
             for (JRadioButton btn : btns) {
-                if (btn.isSelected()) answers.add(btn.getText());
+                if (btn.isSelected()) {
+                    answers.add(btn.getText());
+                    answered = true;
+                }
+            }
+            if (!answered) {
+                JOptionPane.showMessageDialog(this, "Please answer all questions.");
+                return;
             }
         }
 
-        int score = quizEngine.takeQuiz(
-                student.getUserId(),
-                "C101", // replace with selected course
+        // Submit to engine
+        int score = quizEngine.takeQuiz(student.getUserId(),
+                course.getCourseId(),
                 lesson.getLessonId(),
-                answers
-        );
+                answers);
 
         if (score == -2) {
-            JOptionPane.showMessageDialog(this, "Maximum attempts reached!");
+            JOptionPane.showMessageDialog(this,
+                "You have reached the maximum number of attempts.",
+                "Quiz Locked",
+                JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        JOptionPane.showMessageDialog(this,
-                "Your score: " + score + "%\nCorrect answers are shown in green.");
+        JOptionPane.showMessageDialog(this, "Your score: " + score + "%");
 
-        // show correct answers
-        for (int i = 0; i < optionButtons.size(); i++) {
-            String correct = lesson.getQuiz().getQuestions().get(i).getCorrectAnswerLetter();
+        // Show correct answers in green, wrong in red
+        showCorrectAnswers();
+
+        // Return to student dashboard after finishing (optional)
+        MainFrame frame = (MainFrame) SwingUtilities.getWindowAncestor(this);
+        frame.setContentPane(new StudentDashBoard(student.getUsername()));
+        frame.revalidate();
+        frame.repaint();
+    }
+
+    private void showCorrectAnswers() {
+        BackEnd.Quiz quiz = lesson.getQuiz();
+
+        for (int i = 0; i < quiz.getQuestions().size(); i++) {
+
+            String correct = quiz.getQuestions().get(i).getCorrectAnswerLetter();
 
             for (JRadioButton btn : optionButtons.get(i)) {
                 if (btn.getText().equals(correct)) {
