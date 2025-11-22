@@ -84,6 +84,13 @@ public class Quiz extends JPanel {
         add(btnSubmit, BorderLayout.SOUTH);
     }
 
+    
+    private void goToDashboard() {
+    MainFrame frame = (MainFrame) SwingUtilities.getWindowAncestor(this);
+    frame.setContentPane(new StudentDashBoard(student.getUsername()));
+    frame.revalidate();
+    frame.repaint();
+}
         
     private void submitQuiz(){
         ArrayList<String> answers = new ArrayList<>();
@@ -115,6 +122,7 @@ public class Quiz extends JPanel {
                 "You have reached the maximum number of attempts.",
                 "Quiz Locked",
                 JOptionPane.ERROR_MESSAGE);
+            goToDashboard();
             return;
         }
 
@@ -123,11 +131,14 @@ public class Quiz extends JPanel {
         // Show correct answers in green, wrong in red
         showCorrectAnswers();
 
-        // Return to student dashboard after finishing (optional)
-        MainFrame frame = (MainFrame) SwingUtilities.getWindowAncestor(this);
-        frame.setContentPane(new StudentDashBoard(student.getUsername()));
-        frame.revalidate();
-        frame.repaint();
+        int ok = JOptionPane.showConfirmDialog(
+    this,
+    "Your score: " + score + "%. View correct answers and click OK to return.",
+    "Quiz Complete",
+    JOptionPane.OK_CANCEL_OPTION
+);
+
+goToDashboard();
     }
 
     private void showCorrectAnswers() {
