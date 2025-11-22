@@ -17,7 +17,6 @@ private ArrayList<Certificate> certificates = new ArrayList<>();
     }
 
     public Srudent(String username, String email, String passwordHash) {
-        // Generate ID
         super(new IDGenerator().generateUserId(),
               "Student",
               validateUsername(username),
