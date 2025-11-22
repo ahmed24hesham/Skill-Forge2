@@ -8,7 +8,7 @@ public class Course {
     private String title;
     private String description;
     private String instructorId;
-
+    private String status = "PENDING";
     private ArrayList<Lesson> lessons;
     private ArrayList<String> students;  
 
@@ -81,6 +81,14 @@ public class Course {
             students.add(studentUserId);
             
         }
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
     }
 
     public void removeStudent(String studentUserId) {

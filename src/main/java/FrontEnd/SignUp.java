@@ -22,6 +22,7 @@ public class SignUp extends javax.swing.JPanel {
         ButtonGroup roleGroup = new ButtonGroup();
 roleGroup.add(jRadioButton1);
 roleGroup.add(jRadioButton2);
+roleGroup.add(jRadioButton3);
 
 jRadioButton1.setSelected(true); // default    
     }
@@ -46,6 +47,7 @@ jRadioButton1.setSelected(true); // default
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
         jButton1 = new javax.swing.JButton();
+        jRadioButton3 = new javax.swing.JRadioButton();
 
         setPreferredSize(new java.awt.Dimension(400, 500));
 
@@ -101,36 +103,41 @@ jRadioButton1.setSelected(true); // default
             }
         });
 
+        jRadioButton3.setForeground(new java.awt.Color(255, 153, 0));
+        jRadioButton3.setText("Admin");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(133, 133, 133)
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(97, 97, 97)
-                        .addComponent(jRadioButton1)
-                        .addGap(53, 53, 53)
-                        .addComponent(jRadioButton2))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(158, 158, 158)
-                        .addComponent(jButton1)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(54, 54, 54)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jRadioButton1)
+                        .addGap(44, 44, 44)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton1)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jRadioButton2)
+                                .addGap(40, 40, 40)
+                                .addComponent(jRadioButton3)))
+                        .addContainerGap(67, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPasswordField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(37, 37, 37))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(123, 123, 123)
+                .addComponent(jLabel1)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -152,10 +159,11 @@ jRadioButton1.setSelected(true); // default
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(jRadioButton2)
+                    .addComponent(jRadioButton3))
+                .addGap(27, 27, 27)
                 .addComponent(jButton1)
-                .addContainerGap(213, Short.MAX_VALUE))
+                .addContainerGap(198, Short.MAX_VALUE))
         );
 
         jTextField1.getAccessibleContext().setAccessibleName("jTextFieldUsername");
@@ -182,6 +190,7 @@ jRadioButton1.setSelected(true); // default
 
         boolean isStudent = jRadioButton1.isSelected(); 
         boolean isInstructor = jRadioButton2.isSelected(); 
+        boolean isAdmin = jRadioButton3.isSelected();
         try {
             if (isStudent) {
                 Srudent s = new Srudent(username, email, password);
@@ -225,7 +234,38 @@ jRadioButton1.setSelected(true); // default
                     else 
                     JOptionPane.showMessageDialog(this, "username already exists");                        
                 }
-            }   
+            }
+            
+            
+            if (isAdmin) {
+    AdminRole a = new AdminRole(username, email, password);
+    AdminDB adminDB = new AdminDB("users.json");
+
+    if (a.getUsername() == null)
+        JOptionPane.showMessageDialog(this, "Username must be at least 3 characters");
+    else if (a.getEmail() == null)
+        JOptionPane.showMessageDialog(this, "Please enter a valid Email address (example: name@gmail.com).");
+    else {
+        if (adminDB.addAdmin(a)) {
+            JOptionPane.showMessageDialog(this, "Admin account created successfully!");
+            MainFrame frame = (MainFrame) SwingUtilities.getWindowAncestor(this);
+            frame.setSize(400, 500);
+            frame.setContentPane(new LogIn());
+            frame.revalidate();
+            frame.repaint();
+        } else
+            JOptionPane.showMessageDialog(this, "Username already exists");
+    }
+}
+
+            
+            
+            
+            
+            
+            
+            
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -259,6 +299,7 @@ jRadioButton1.setSelected(true); // default
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
+    private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables

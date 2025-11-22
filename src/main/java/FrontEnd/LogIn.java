@@ -7,6 +7,7 @@ package FrontEnd;
 import javax.swing.ButtonGroup;
 import javax.swing.SwingUtilities;
 import BackEnd.*;
+import static BackEnd.AuthService.AuthAdmin;
 import static BackEnd.AuthService.AuthInstructor;
 import static BackEnd.AuthService.AuthStudent;
 import javax.swing.JOptionPane;
@@ -26,6 +27,7 @@ public class LogIn extends javax.swing.JPanel {
                 ButtonGroup roleGroup = new ButtonGroup();
 roleGroup.add(instructorRadio);
 roleGroup.add(studentRadio);
+roleGroup.add(adminRadio);
 
 studentRadio.setSelected(true); // default
     }
@@ -50,6 +52,7 @@ studentRadio.setSelected(true); // default
         jButton2 = new javax.swing.JButton();
         instructorRadio = new javax.swing.JRadioButton();
         studentRadio = new javax.swing.JRadioButton();
+        adminRadio = new javax.swing.JRadioButton();
 
         setPreferredSize(new java.awt.Dimension(400, 500));
 
@@ -116,6 +119,14 @@ studentRadio.setSelected(true); // default
             }
         });
 
+        adminRadio.setForeground(new java.awt.Color(255, 153, 0));
+        adminRadio.setText("Admin");
+        adminRadio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                adminRadioActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -127,7 +138,7 @@ studentRadio.setSelected(true); // default
                         .addComponent(jLabel1))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(43, 43, 43)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addGap(18, 18, 18)
@@ -136,11 +147,13 @@ studentRadio.setSelected(true); // default
                             .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3)
                             .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                            .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(studentRadio)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(instructorRadio)
-                                .addGap(42, 42, 42)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(adminRadio)
+                                .addGap(18, 18, 18)
                                 .addComponent(jButton1)))))
                 .addContainerGap(56, Short.MAX_VALUE))
         );
@@ -161,7 +174,8 @@ studentRadio.setSelected(true); // default
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(studentRadio)
-                    .addComponent(instructorRadio, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(instructorRadio, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(adminRadio))
                 .addGap(31, 31, 31)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -195,6 +209,8 @@ studentRadio.setSelected(true); // default
         String password = new String(jPasswordField1.getPassword());
                 boolean isStudent = studentRadio.isSelected(); 
         boolean isInstructor = instructorRadio.isSelected(); 
+                boolean isAdmin = adminRadio.isSelected(); 
+
         if(isStudent){
            if(AuthStudent(username,password,"Student")){
     MainFrame mainFrame = (MainFrame) SwingUtilities.getWindowAncestor(this);
@@ -224,6 +240,20 @@ studentRadio.setSelected(true); // default
   
         }
         }
+        
+        else if(isAdmin){
+    if(AuthAdmin(username, password, "Admin")){
+        MainFrame mainFrame = (MainFrame) SwingUtilities.getWindowAncestor(this);
+        mainFrame.setContentPane(new AdminDashBoard(username));
+        mainFrame.setSize(1200, 750);
+        mainFrame.setLocationRelativeTo(null);
+        mainFrame.revalidate();
+        mainFrame.repaint();
+    } else {
+        JOptionPane.showMessageDialog(this, "username or password or role are invalid");
+    }
+}
+      
         
      
         
@@ -260,8 +290,13 @@ studentRadio.setSelected(true); // default
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
 
+    private void adminRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminRadioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_adminRadioActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton adminRadio;
     private javax.swing.JRadioButton instructorRadio;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;

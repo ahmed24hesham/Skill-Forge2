@@ -28,4 +28,23 @@ public class AuthService {
         }
      return false;
  }
+  
+  
+    public static boolean AuthAdmin(String username,String password,String role){
+                        AdminDB adminDB = new AdminDB("users.json");
+
+            ArrayList<AdminRole> list =adminDB.load();        
+        for (AdminRole a : list) {
+            if (a.getUsername().trim().equals(username)) {
+                if(a.getPasswordHash().equals(sha256(password))&&a.getRole().equals(role))
+                return true;
+            }
+        }
+     return false;
+ }
+  
+  
+  
+  
+  
 }
