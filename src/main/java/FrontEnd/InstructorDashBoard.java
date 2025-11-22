@@ -195,19 +195,26 @@ public double getCourseAverageScore(String courseId) {
 
     return (double) totalScores / count;
 }
-public double getLessonCompletionPercentage(String lessonId) {
-    StudentDB studentDB = new StudentDB("users.json");
-    ArrayList<Srudent> students = studentDB.load();
+public double getLessonCompletionPercentage(String courseId, String lessonId) {
+     StudentDB studentDB = new StudentDB("users.json");
+    ArrayList<Srudent> allStudents = studentDB.load();
+    int enrolledCount = 0;
+    int completedCount = 0;
+    for (Srudent s : allStudents) {
 
-    if (students.isEmpty()) return 0;
+        if (s.getEnrolledCourses().contains(courseId)) {
+            enrolledCount++;
 
-    int completed = 0;
-    for (Srudent s : students) {
-        if (s.hasPassedLesson(lessonId)) completed++;
+            if (s.getCompletedLessons().contains(lessonId)) {
+                completedCount++;
+            }
+        }
     }
 
-    return completed * 100.0 / students.size();
+    if (enrolledCount == 0) return 0;
+    return (completedCount * 100.0) / enrolledCount;
 }
+
 public double getCourseCompletionPercentage(String courseId) {
     CourseDB courseDB = new CourseDB("courses.json");
     StudentDB studentDB = new StudentDB("users.json");
@@ -229,12 +236,11 @@ public double getCourseCompletionPercentage(String courseId) {
     double totalPercentage = 0;
 
     for (Lesson l : lessons) {
-        totalPercentage += getLessonCompletionPercentage(l.getLessonId());
+        totalPercentage += getLessonCompletionPercentage(courseId,l.getLessonId());
     }
 
     return totalPercentage / lessons.size();
 }
-
 
 
     @SuppressWarnings("unchecked")
@@ -914,7 +920,7 @@ if (selectedCourse == null || selectedLesson == null) {
     JOptionPane.showMessageDialog(this, "Select a lesson first.");
     return;
 }
-     Double average =getLessonCompletionPercentage(selectedLesson.getLessonId());
+     Double average =getLessonCompletionPercentage(selectedCourse.getCourseId(),selectedLesson.getLessonId());
      JOptionPane.showMessageDialog(this,
         "Completion percantage = " + average);
     }//GEN-LAST:event_jButton6ActionPerformed

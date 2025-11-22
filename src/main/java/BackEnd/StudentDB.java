@@ -87,5 +87,15 @@ public ArrayList<Srudent> load() {
     save(load()); 
     return cert;
 }
+  public Srudent getStudentById(String id) {
+    ArrayList<Srudent> list = load();
+    
+    for (Srudent s : list) {
+        if (s.getUserId().equals(id)) {
+            return s;
+        }
+    }
+    return null; 
+}
 
 }   

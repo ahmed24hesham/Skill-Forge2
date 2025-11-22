@@ -35,32 +35,37 @@ private String loggedStudentId;
     /**
      * Creates new form StudentDashBoard
      */
+
+    public StudentDashBoard() {
+        
+    }
+
     public StudentDashBoard(String username) {
         this.username = username;
-
-for (Srudent s : studentsList) {
-    if (s.getUsername().trim().equals(username)) {
-        loggedStudent = s;
-        loggedStudentId = s.getUserId();
-        break;
-    }
-}
-
-initComponents();
-
-listAvailable = new JList<>(availableModel);
-listEnrolled = new JList<>(enrolledModel);
-listLessons = new JList<>(lessonModel);
-
-panelAvailable.setLayout(new BorderLayout());
-panelAvailable.add(new JScrollPane(listAvailable), BorderLayout.CENTER);
-
-panelEnrolled.setLayout(new BorderLayout());
-panelEnrolled.add(new JScrollPane(listEnrolled), BorderLayout.CENTER);
-
-panelLessons.setLayout(new BorderLayout());
-panelLessons.add(new JScrollPane(listLessons), BorderLayout.CENTER);
-
+        
+        for (Srudent s : studentsList) {
+            if (s.getUsername().trim().equals(username)) {
+                loggedStudent = s;
+                loggedStudentId = s.getUserId();
+                break;
+            }
+        }
+        
+        initComponents();
+        
+        listAvailable = new JList<>(availableModel);
+        listEnrolled = new JList<>(enrolledModel);
+        listLessons = new JList<>(lessonModel);
+        
+        panelAvailable.setLayout(new BorderLayout());
+        panelAvailable.add(new JScrollPane(listAvailable), BorderLayout.CENTER);
+        
+        panelEnrolled.setLayout(new BorderLayout());
+        panelEnrolled.add(new JScrollPane(listEnrolled), BorderLayout.CENTER);
+        
+        panelLessons.setLayout(new BorderLayout());
+        panelLessons.add(new JScrollPane(listLessons), BorderLayout.CENTER);
+        
 // selecting a course loads lessons
 listEnrolled.addListSelectionListener(e -> {
     selectedCourse = listEnrolled.getSelectedValue();
@@ -172,7 +177,6 @@ loadCourses();
         btnEnroll = new javax.swing.JButton();
         btnRefresh = new javax.swing.JButton();
         btnViewLessons = new javax.swing.JButton();
-        btnMarkComplete = new javax.swing.JButton();
         lblProgress = new javax.swing.JLabel();
         btnLogOut = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -180,6 +184,7 @@ loadCourses();
         jLabel3 = new javax.swing.JLabel();
         ViewLessonContent = new javax.swing.JButton();
         btnTakeQuiz = new javax.swing.JButton();
+        Certificate = new javax.swing.JButton();
 
         StudentDashBoard.setBackground(new java.awt.Color(0, 0, 0));
         StudentDashBoard.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -242,14 +247,6 @@ loadCourses();
             }
         });
 
-        btnMarkComplete.setBackground(new java.awt.Color(255, 102, 0));
-        btnMarkComplete.setText("Mark Completed");
-        btnMarkComplete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMarkCompleteActionPerformed(evt);
-            }
-        });
-
         lblProgress.setBackground(new java.awt.Color(255, 102, 0));
         lblProgress.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         lblProgress.setForeground(new java.awt.Color(255, 102, 0));
@@ -291,6 +288,14 @@ loadCourses();
             }
         });
 
+        Certificate.setBackground(new java.awt.Color(255, 102, 0));
+        Certificate.setText("Certificate");
+        Certificate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CertificateActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout StudentDashBoardLayout = new javax.swing.GroupLayout(StudentDashBoard);
         StudentDashBoard.setLayout(StudentDashBoardLayout);
         StudentDashBoardLayout.setHorizontalGroup(
@@ -322,21 +327,22 @@ loadCourses();
                                     .addComponent(jLabel2)
                                     .addGroup(StudentDashBoardLayout.createSequentialGroup()
                                         .addComponent(btnRefresh)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(btnMarkComplete)
-                                        .addGap(32, 32, 32)
+                                        .addGap(169, 169, 169)
                                         .addComponent(lblProgress)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnTakeQuiz))
-                            .addGroup(StudentDashBoardLayout.createSequentialGroup()
-                                .addComponent(btnEnroll)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnViewLessons)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, StudentDashBoardLayout.createSequentialGroup()
+                                .addGroup(StudentDashBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(Certificate)
+                                    .addGroup(StudentDashBoardLayout.createSequentialGroup()
+                                        .addComponent(btnEnroll)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnViewLessons)))
                                 .addGap(79, 79, 79)
                                 .addComponent(btnLogOut)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(ViewLessonContent)))
-                        .addGap(58, 58, 58))))
+                        .addGap(96, 96, 96))))
         );
         StudentDashBoardLayout.setVerticalGroup(
             StudentDashBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -358,10 +364,10 @@ loadCourses();
                     .addComponent(ViewLessonContent))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(StudentDashBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnMarkComplete)
                     .addComponent(btnRefresh)
                     .addComponent(lblProgress)
-                    .addComponent(btnTakeQuiz))
+                    .addComponent(btnTakeQuiz)
+                    .addComponent(Certificate))
                 .addGap(8, 8, 8))
         );
 
@@ -369,7 +375,7 @@ loadCourses();
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(StudentDashBoard, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
+            .addComponent(StudentDashBoard, javax.swing.GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -400,44 +406,6 @@ loadCourses();
 
     loadLessons();
     }//GEN-LAST:event_btnViewLessonsActionPerformed
-
-    private void btnMarkCompleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMarkCompleteActionPerformed
-        // TODO add your handling code here:
-        Lesson selectedLesson = listLessons.getSelectedValue();
-        Course selectedCourse = listEnrolled.getSelectedValue();
-
-    if (selectedCourse == null) {
-        JOptionPane.showMessageDialog(this, "Select the appropriate  course first.");
-        return;
-    }
-
-    if (selectedLesson == null) {
-        JOptionPane.showMessageDialog(this, "Select a lesson first.");
-        return;
-    }
-
-  
-if (!loggedStudent.getEnrolledCourses().contains(selectedCourse.getCourseId())) {
-        JOptionPane.showMessageDialog(this,
-                "You cannot complete lessons for a course you are NOT enrolled in!");
-        return;
-    }
-
-    ArrayList<Srudent> allStudents = studentDB.load();
-    for (Srudent s : allStudents) {
-        if (s.getUserId().equals(loggedStudentId)) {
-            s.completeLesson(selectedLesson.getLessonId());
-        }
-    }
-
-
-    loggedStudent.completeLesson(selectedLesson.getLessonId());
-    
-    studentDB.save(allStudents);
-    updateProgress();
-    
-    JOptionPane.showMessageDialog(this, "Lesson marked as completed!");
-    }//GEN-LAST:event_btnMarkCompleteActionPerformed
 
     private void btnLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutActionPerformed
 //       JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
@@ -478,13 +446,70 @@ if (!loggedStudent.getEnrolledCourses().contains(selectedCourse.getCourseId())) 
     frame.repaint();
     }//GEN-LAST:event_btnTakeQuizActionPerformed
 
+    private void CertificateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CertificateActionPerformed
+   
+    if (loggedStudent == null || selectedCourse == null) {
+        JOptionPane.showMessageDialog(this, "Please select a course.");
+        return;
+    }
+
+    int totalLessons = selectedCourse.getLessons().size();
+    int completed = 0;
+
+    for (Lesson lesson : selectedCourse.getLessons()) {
+        if (loggedStudent.getCompletedLessons().contains(lesson.getLessonId())) {
+            completed++;
+        }
+    }
+
+    int percent = (totalLessons == 0) ? 0 : (completed * 100 / totalLessons);
+
+
+    StudentDB db = new StudentDB("users.json");
+    Srudent fresh = db.getStudentById(loggedStudent.getUserId());
+
+
+    // Find certificate
+    Certificate cert = null;
+    for (Certificate c : fresh.getCertificates()) {
+        if (c.getCourseId().equals(selectedCourse.getCourseId())) {
+            cert = c;
+            break;
+        }
+    }
+
+
+    // If none AND progress = 100 → generate it
+    if (cert == null && percent == 100) {
+        cert = db.generateCertificate(fresh, selectedCourse);
+        db.save(db.load());
+        JOptionPane.showMessageDialog(this, "🎉 Certificate generated!");
+    }
+
+    // Still no certificate after generation attempt?
+    if (cert == null) {
+        JOptionPane.showMessageDialog(this, "No certificate available yet.");
+        return;
+    }
+
+
+    // Now show the certificate panel
+    CertificatePanel panel = new CertificatePanel(cert,loggedStudent);
+
+    StudentDashBoard.removeAll();
+    StudentDashBoard.setLayout(new BorderLayout());
+    StudentDashBoard.add(panel, BorderLayout.CENTER);
+    StudentDashBoard.revalidate();
+    StudentDashBoard.repaint();
+    }//GEN-LAST:event_CertificateActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Certificate;
     private javax.swing.JPanel StudentDashBoard;
     private javax.swing.JButton ViewLessonContent;
     private javax.swing.JButton btnEnroll;
     private javax.swing.JButton btnLogOut;
-    private javax.swing.JButton btnMarkComplete;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnTakeQuiz;
     private javax.swing.JButton btnViewLessons;
