@@ -1,6 +1,7 @@
 package BackEnd;
 
 import com.google.gson.reflect.TypeToken;
+import java.io.FileReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
@@ -13,15 +14,28 @@ public class InstructorDB extends JsonDatabaseManager<Instructor> {
     }
 
     @Override
-    public ArrayList<Instructor> load() {
-        try (java.io.FileReader reader = new java.io.FileReader(fileName)) {
-            ArrayList<Instructor> list = gson.fromJson(reader, typeOfT);
-            return list != null ? list : new ArrayList<>();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<>();
+public ArrayList<Instructor> load() {
+    try (FileReader reader = new FileReader(fileName)) {
+
+        ArrayList<User> allUsers = gson.fromJson(reader, typeOfT);
+        ArrayList<Instructor> instructors = new ArrayList<>();
+
+        if (allUsers != null) {
+            for (User u : allUsers) {
+                if (u instanceof Instructor || "instructor".equalsIgnoreCase(u.getRole())) {
+                    instructors.add((Instructor) u);
+                }
+            }
         }
+
+        return instructors;
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        return new ArrayList<>();
     }
+}
+
 
     @Override
     public void save(ArrayList<Instructor> list) {

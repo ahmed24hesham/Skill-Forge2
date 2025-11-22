@@ -2,6 +2,7 @@ package BackEnd;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import java.io.FileReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Map;
@@ -16,16 +17,28 @@ public class StudentDB extends JsonDatabaseManager<Srudent> {
     }
 
     @Override
-    public ArrayList<Srudent> load() {
-        try (java.io.FileReader reader = new java.io.FileReader(fileName)) {
-            ArrayList<Srudent> list = gson.fromJson(reader, typeOfT);
-            
-            return list != null ? list : new ArrayList<>();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<>();
+public ArrayList<Srudent> load() {
+    try (FileReader reader = new FileReader(fileName)) {
+
+        ArrayList<User> allUsers = gson.fromJson(reader, typeOfT);
+        ArrayList<Srudent> students = new ArrayList<>();
+
+        if (allUsers != null) {
+            for (User u : allUsers) {
+                if (u instanceof Srudent || "student".equalsIgnoreCase(u.getRole())) {
+                    students.add((Srudent) u);
+                }
+            }
         }
+
+        return students;
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        return new ArrayList<>();
     }
+}
+
 
     @Override
     public void save(ArrayList<Srudent> list) {

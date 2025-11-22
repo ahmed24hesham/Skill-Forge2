@@ -2,6 +2,7 @@ package BackEnd;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import java.io.FileReader;
 import java.util.ArrayList;
 
 public class AdminDB extends JsonDatabaseManager<AdminRole> {
@@ -13,15 +14,28 @@ public class AdminDB extends JsonDatabaseManager<AdminRole> {
     }
 
     @Override
-    public ArrayList<AdminRole> load() {
-        try (java.io.FileReader reader = new java.io.FileReader(fileName)) {
-            ArrayList<AdminRole> list = gson.fromJson(reader, typeOfT);
-            return list != null ? list : new ArrayList<>();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<>();
+public ArrayList<AdminRole> load() {
+    try (FileReader reader = new FileReader(fileName)) {
+        ArrayList<User> allUsers = gson.fromJson(reader, typeOfT);
+
+        ArrayList<AdminRole> admins = new ArrayList<>();
+
+        if (allUsers != null) {
+            for (User u : allUsers) {
+                if (u instanceof AdminRole || "admin".equalsIgnoreCase(u.getRole())) {
+                    admins.add((AdminRole) u);
+                }
+            }
         }
+
+        return admins;
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        return new ArrayList<>();
     }
+}
+
 
     @Override
     public void save(ArrayList<AdminRole> list) {

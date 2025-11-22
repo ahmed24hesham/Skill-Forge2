@@ -24,7 +24,8 @@ public class MainFrame extends javax.swing.JFrame {
     setContentPane(loginPanel);    
  this.setSize(400, 500); 
     this.setLocationRelativeTo(null);
-        
+       this.setResizable(true);
+ 
         
  
 

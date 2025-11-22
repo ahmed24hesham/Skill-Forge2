@@ -28,6 +28,9 @@ public class AdminDashBoard extends javax.swing.JPanel {
 public AdminDashBoard(String username){
     this.username = username;
     initComponents();
+//setLayout(new BorderLayout());
+//add(jPanel2, BorderLayout.WEST);
+//add(contentPanel, BorderLayout.CENTER);
 
     // Make sure contentPanel has a proper layout
     contentPanel.setLayout(new BorderLayout());
