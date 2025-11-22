@@ -56,28 +56,36 @@ public class Quiz extends JPanel {
             JRadioButton[] btns = new JRadioButton[q.getChoices().size()];
 
             for (int i = 0; i < q.getChoices().size(); i++) {
-                btns[i] = new JRadioButton(q.getChoices().get(i).getText());
-                btns[i].setForeground(Color.LIGHT_GRAY);
-                btns[i].setBackground(Color.BLACK);
+    String choiceText = q.getChoices().get(i).getText(); // visible text
+    char letter = (char) ('A' + i);                      // A, B, C, D...
 
-                group.add(btns[i]);
-                questionsPanel.add(btns[i]);
+    btns[i] = new JRadioButton(choiceText);
+    btns[i].setActionCommand(String.valueOf(letter));    // <-- store A/B/C/D
+    btns[i].setForeground(Color.LIGHT_GRAY);
+    btns[i].setBackground(Color.BLACK);
+
+    group.add(btns[i]);
+    questionsPanel.add(btns[i]);
             }
 
-            optionButtons.add(btns);
+        optionButtons.add(btns);
+
             questionsPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         }
 
         add(new JScrollPane(questionsPanel), BorderLayout.CENTER);
 
+        // ========================
+        // Submit Button
+        // ========================
         btnSubmit = new JButton("Submit Quiz");
         btnSubmit.setBackground(Color.ORANGE);
         btnSubmit.addActionListener(e -> submitQuiz());
-
         add(btnSubmit, BorderLayout.SOUTH);
     }
 
-    private void submitQuiz() {
+        
+    private void submitQuiz(){
         ArrayList<String> answers = new ArrayList<>();
 
         // Collect student answers
@@ -85,8 +93,9 @@ public class Quiz extends JPanel {
             boolean answered = false;
             for (JRadioButton btn : btns) {
                 if (btn.isSelected()) {
-                    answers.add(btn.getText());
+                    answers.add(btn.getActionCommand());
                     answered = true;
+                    break;
                 }
             }
             if (!answered) {
@@ -129,7 +138,7 @@ public class Quiz extends JPanel {
             String correct = quiz.getQuestions().get(i).getCorrectAnswerLetter();
 
             for (JRadioButton btn : optionButtons.get(i)) {
-                if (btn.getText().equals(correct)) {
+                if (btn.getActionCommand().equals(correct)) {
                     btn.setForeground(Color.GREEN);
                 } else {
                     btn.setForeground(Color.RED);

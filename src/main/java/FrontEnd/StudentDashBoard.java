@@ -458,7 +458,6 @@ if (!loggedStudent.getEnrolledCourses().contains(selectedCourse.getCourseId())) 
     }//GEN-LAST:event_ViewLessonContentActionPerformed
 
     private void btnTakeQuizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTakeQuizActionPerformed
-        // TODO add your handling code here:
         selectedLesson = listLessons.getSelectedValue();
         selectedCourse = listEnrolled.getSelectedValue();
 
@@ -474,7 +473,7 @@ if (!loggedStudent.getEnrolledCourses().contains(selectedCourse.getCourseId())) 
 
     // Open QuizPanel inside MainFrame
     MainFrame frame = (MainFrame) SwingUtilities.getWindowAncestor(this);
-    frame.setContentPane(new Quiz(selectedLesson, loggedStudent, selectedCourse));
+    frame.setContentPane(new FrontEnd.Quiz(selectedLesson, loggedStudent, selectedCourse));
     frame.revalidate();
     frame.repaint();
     }//GEN-LAST:event_btnTakeQuizActionPerformed

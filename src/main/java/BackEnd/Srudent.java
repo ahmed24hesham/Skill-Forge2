@@ -11,6 +11,9 @@ public class Srudent extends User {
 
     public Srudent() {
         // Needed for Gson
+    this.enrolledCourses = new ArrayList<>();
+    this.completedLessons = new ArrayList<>();
+    this.quizResults = new ArrayList<>();
     }
 
     public Srudent(String username, String email, String passwordHash) {
@@ -74,11 +77,9 @@ public class Srudent extends User {
         }
     }
     
-    Course c = new Course ();
     public void addQuizResult(String lessonId, int score ,int attempt ) {
         quizResults.add(new QuizResult(lessonId, score ,attempt));
-        Lesson l = c.getLessonById(lessonId);
-        if (score >= l.getQuiz().getPassingScore()  && !completedLessons.contains(lessonId)) {
+        if (score >= 50&& !completedLessons.contains(lessonId)) {
             completedLessons.add(lessonId);
         }
     }

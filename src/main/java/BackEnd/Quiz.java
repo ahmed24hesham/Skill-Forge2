@@ -11,13 +11,7 @@ public class Quiz {
         this.questions = new ArrayList<>();
         this.passingScore = 50;
     }
-    public Quiz(int questionCount , int passingScore) {
-        this.questionCount = questionCount;
-        this.questions = new ArrayList<>();
-        this.passingScore = passingScore;
-    }
-    
-
+ 
     public boolean addQuestion(Question q) { // if question = null ????
         if (questions.size() < questionCount) {
             questions.add(q);
