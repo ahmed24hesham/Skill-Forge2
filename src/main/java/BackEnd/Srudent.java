@@ -8,7 +8,7 @@ public class Srudent extends User {
     private ArrayList<String> enrolledCourses ;
     private ArrayList<String> completedLessons ;
      private ArrayList<QuizResult> quizResults;
-
+private ArrayList<Certificate> certificates = new ArrayList<>();
     public Srudent() {
         // Needed for Gson
     this.enrolledCourses = new ArrayList<>();
@@ -99,5 +99,19 @@ public boolean hasPassedLesson(String lessonId) {
     public ArrayList<QuizResult> getQuizResults() {
         return quizResults;
     }
+    public boolean hasCompletedCourse(Course course) {
+    for (Lesson lesson : course.getLessons()) {
+        if (!completedLessons.contains(lesson.getLessonId())) {
+            return false;
+        }
+    }
+    return true;
+}
+    public ArrayList<Certificate> getCertificates() {
+    return certificates;
+}
+    public void addCertificate(Certificate c) {
+    certificates.add(c);
+}
     
 }

@@ -16,4 +16,5 @@ public abstract class JsonDatabaseManager<T> {
     public abstract ArrayList<T> load();
     public abstract void save(ArrayList<T> list);
     public abstract boolean add(T obj);
+        
 }

@@ -79,4 +79,13 @@ public ArrayList<Srudent> load() {
     public boolean addStudent(Srudent s) {
        return add(s);
     }
+  public Certificate generateCertificate(Srudent s, Course c) {
+    String id = "CERT-" + System.currentTimeMillis();
+    String date = java.time.LocalDate.now().toString();
+    Certificate cert = new Certificate(id, s.getUserId(), c.getCourseId(), date);
+    s.addCertificate(cert);
+    save(load()); 
+    return cert;
 }
+
+}   
