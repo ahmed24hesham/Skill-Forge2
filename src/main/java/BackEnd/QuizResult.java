@@ -10,17 +10,17 @@ package BackEnd;
  */
 public class QuizResult {
     private String lessonId;
-    private int score;
+    private double score;
     private int attemptNumber;
 
-    public QuizResult(String lessonId, int score , int attempt) {
+    public QuizResult(String lessonId, double score , int attempt) {
         this.lessonId = lessonId;
         this.score = score;
         this.attemptNumber = attempt;
     }
 
     public String getLessonId() { return lessonId; }
-    public int getScore() { return score; }
+    public double getScore() { return score; }
     public int getAttemptNumber(){return attemptNumber;}
     
 }

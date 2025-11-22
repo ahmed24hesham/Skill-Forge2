@@ -77,7 +77,7 @@ public class Srudent extends User {
         }
     }
     
-    public void addQuizResult(String lessonId, int score ,int attempt ) {
+    public void addQuizResult(String lessonId, double score ,int attempt ) {
         quizResults.add(new QuizResult(lessonId, score ,attempt));
         if (score >= 50&& !completedLessons.contains(lessonId)) {
             completedLessons.add(lessonId);

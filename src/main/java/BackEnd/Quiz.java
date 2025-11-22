@@ -12,7 +12,7 @@ public class Quiz {
         this.passingScore = 50;
     }
  
-    public boolean addQuestion(Question q) { // if question = null ????
+    public boolean addQuestion(Question q) { 
         if (questions.size() < questionCount) {
             questions.add(q);
             return true;
@@ -30,8 +30,8 @@ public class Quiz {
     
     public int getMaxAttempts() { return maxAttempts; }
 
-    public int calculateScore(ArrayList<String> studentAnswers) {
-        int score = 0;
+    public double calculateScore(ArrayList<String> studentAnswers) {
+        double score = 0;
         for (int i = 0; i < questions.size(); i++) {
             if (studentAnswers.get(i).equalsIgnoreCase(questions.get(i).getCorrectAnswerLetter())) {
                 score +=(double) 100.0 / questions.size();

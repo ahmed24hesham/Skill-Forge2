@@ -134,6 +134,107 @@ private void loadLessons() {
         JOptionPane.showMessageDialog(this,selectedLesson.getContent());
   
 }
+    public double getLessonQuizAverage(String lessonId) {
+    StudentDB studentDB = new StudentDB("users.json");
+    ArrayList<Srudent> students = studentDB.load();
+
+    int totalScore = 0;
+    int count = 0;
+
+    for (Srudent s : students) {
+        ArrayList<QuizResult> results = s.getQuizResults();
+        QuizResult last = null;
+        for (QuizResult qr : results) {
+            if (qr.getLessonId().equals(lessonId)) {
+                if (last == null || qr.getAttemptNumber() > last.getAttemptNumber()) {
+                    last = qr;
+                }
+            }
+        }
+        if (last != null) {
+            totalScore += last.getScore();
+            count++;
+        }
+    }
+
+    if (count == 0) return 0; 
+
+    return totalScore * 1.0 / count;
+}
+public double getCourseAverageScore(String courseId) {
+    ArrayList<Course> courses = new CourseDB("courses.json").load();
+    ArrayList<Srudent> students = new StudentDB("users.json").load();
+
+    Course target = null;
+    for (Course c : courses) {
+        if (c.getCourseId().equals(courseId)) {
+            target = c;
+            break;
+        }
+    }
+    if (target == null) return -1;
+
+    ArrayList<String> lessons = new ArrayList<>();
+    for (Lesson l : target.getLessons()) {
+        lessons.add(l.getLessonId());
+    }
+
+    int totalScores = 0;
+    int count = 0;
+
+    for (Srudent s : students) {
+        for (QuizResult qr : s.getQuizResults()) {
+            if (lessons.contains(qr.getLessonId())) {
+                totalScores += qr.getScore();
+                count++;
+            }
+        }
+    }
+
+    if (count == 0) return 0;
+
+    return (double) totalScores / count;
+}
+public double getLessonCompletionPercentage(String lessonId) {
+    StudentDB studentDB = new StudentDB("users.json");
+    ArrayList<Srudent> students = studentDB.load();
+
+    if (students.isEmpty()) return 0;
+
+    int completed = 0;
+    for (Srudent s : students) {
+        if (s.hasPassedLesson(lessonId)) completed++;
+    }
+
+    return completed * 100.0 / students.size();
+}
+public double getCourseCompletionPercentage(String courseId) {
+    CourseDB courseDB = new CourseDB("courses.json");
+    StudentDB studentDB = new StudentDB("users.json");
+
+    ArrayList<Course> courses = courseDB.load();
+    ArrayList<Srudent> students = studentDB.load();
+
+    Course target = null;
+    for (Course c : courses) {
+        if (c.getCourseId().equals(courseId)) {
+            target = c;
+            break;
+        }
+    }
+
+    if (target == null || target.getLessons().isEmpty()) return 0;
+
+    ArrayList<Lesson> lessons = target.getLessons();
+    double totalPercentage = 0;
+
+    for (Lesson l : lessons) {
+        totalPercentage += getLessonCompletionPercentage(l.getLessonId());
+    }
+
+    return totalPercentage / lessons.size();
+}
+
 
 
     @SuppressWarnings("unchecked")
@@ -156,6 +257,10 @@ private void loadLessons() {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(0, 0, 0));
 
@@ -287,6 +392,38 @@ private void loadLessons() {
             }
         });
 
+        jButton4.setBackground(new java.awt.Color(255, 102, 0));
+        jButton4.setText("Quiz Average per Lesson");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jButton5.setBackground(new java.awt.Color(255, 102, 0));
+        jButton5.setText("Quiz Average per course ");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jButton6.setBackground(new java.awt.Color(255, 102, 0));
+        jButton6.setText("Lesson completion %");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
+        jButton7.setBackground(new java.awt.Color(255, 102, 0));
+        jButton7.setText("Course completion %");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -297,21 +434,27 @@ private void loadLessons() {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(delete)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(delete)
+                                    .addComponent(create))
+                                .addGap(33, 33, 33)
+                                .addComponent(jButton1))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(8, 8, 8)
-                                .addComponent(btnRefreshCourses))
-                            .addComponent(create))
-                        .addGap(33, 33, 33)
-                        .addComponent(jButton1)))
+                                .addComponent(btnRefreshCourses)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton7)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(LessonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(7, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(159, 159, 159)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel2)
                         .addGap(175, 175, 175))
@@ -319,25 +462,29 @@ private void loadLessons() {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(edit)
-                                .addGap(160, 160, 160))
+                                .addGap(121, 121, 121))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(btnLogOut)
                                 .addGap(18, 18, 18)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(AddLesson)
+                                .addGap(18, 18, 18)
+                                .addComponent(DeleteLesson)
+                                .addGap(35, 35, 35)
+                                .addComponent(jButton6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton2)
+                                .addGap(41, 41, 41))
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(ViewEnrolledStudents)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(editLesson)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton3)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(AddLesson)
-                                .addGap(18, 18, 18)
-                                .addComponent(DeleteLesson)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton2)
-                                .addGap(41, 41, 41))))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jButton4)
+                                    .addComponent(jButton3))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -354,26 +501,35 @@ private void loadLessons() {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnLogOut)
-                            .addComponent(btnRefreshCourses))
-                        .addContainerGap())
+                            .addComponent(btnRefreshCourses)
+                            .addComponent(jButton7)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel2)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton5)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(edit)
                             .addComponent(AddLesson)
                             .addComponent(DeleteLesson)
-                            .addComponent(jButton2))
+                            .addComponent(jButton2)
+                            .addComponent(jButton6))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(ViewEnrolledStudents)
                             .addComponent(editLesson)
                             .addComponent(jButton1)
                             .addComponent(jButton3))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton4)
+                        .addGap(0, 10, Short.MAX_VALUE)))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -713,6 +869,56 @@ if (selectedCourse == null || selectedLesson == null) {
 
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+                Lesson selectedLesson = lessonList.getSelectedValue();
+if (selectedCourse == null || selectedLesson == null) {
+    JOptionPane.showMessageDialog(this, "Select a lesson first.");
+    return;
+}
+     Double average =getLessonQuizAverage(selectedLesson.getLessonId());
+     String formatted = String.format("%.2f", average);
+     JOptionPane.showMessageDialog(this,
+        "Average Quiz Score = " + formatted);
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+         if (selectedCourse == null) {
+        JOptionPane.showMessageDialog(this, "Select a course first.");
+        return;
+    }
+         double average = getCourseAverageScore(selectedCourse.getCourseId());
+         String formatted = String.format("%.2f", average);
+  JOptionPane.showMessageDialog(this,
+        "Average Marks Score  Per Course= " + formatted);
+        
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+          if (selectedCourse == null) {
+        JOptionPane.showMessageDialog(this, "Select a course first.");
+        return;
+    }
+         double average = getCourseCompletionPercentage(selectedCourse.getCourseId());
+         String formatted = String.format("%.2f", average);
+  JOptionPane.showMessageDialog(this,
+        "Completon percantage= " + formatted);
+        
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+          Lesson selectedLesson = lessonList.getSelectedValue();
+if (selectedCourse == null || selectedLesson == null) {
+    JOptionPane.showMessageDialog(this, "Select a lesson first.");
+    return;
+}
+     Double average =getLessonCompletionPercentage(selectedLesson.getLessonId());
+     JOptionPane.showMessageDialog(this,
+        "Completion percantage = " + average);
+    }//GEN-LAST:event_jButton6ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddLesson;
@@ -729,6 +935,10 @@ if (selectedCourse == null || selectedLesson == null) {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables

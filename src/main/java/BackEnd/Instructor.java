@@ -62,7 +62,6 @@ public class Instructor extends User {
         }
         System.out.println("Course not found: " + cID);
     }
-
     public void addLesson(String cID, Lesson l) {
         ArrayList<Course> list = courseDB.load();
         for (Course c : list) {

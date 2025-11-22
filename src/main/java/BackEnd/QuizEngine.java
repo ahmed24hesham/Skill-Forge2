@@ -12,7 +12,7 @@ public class QuizEngine {
         studentDB = new StudentDB("users.json");
     }
 
-    public int takeQuiz(String studentId, String courseId, String lessonId, ArrayList<String> answers) {
+    public double takeQuiz(String studentId, String courseId, String lessonId, ArrayList<String> answers) {
 
         ArrayList<Course> courses = courseDB.load();
         Course course = null;
@@ -45,7 +45,7 @@ public class QuizEngine {
             return -2;  // MAX ATTEMPTS REACHED
         }
 
-        int score = quiz.calculateScore(answers);
+        double score = quiz.calculateScore(answers);
         student.addQuizResult(lessonId, score, attempts + 1);
 
 

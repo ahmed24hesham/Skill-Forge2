@@ -112,7 +112,7 @@ public class Quiz extends JPanel {
         }
 
         // Submit to engine
-        int score = quizEngine.takeQuiz(student.getUserId(),
+        double score = quizEngine.takeQuiz(student.getUserId(),
                 course.getCourseId(),
                 lesson.getLessonId(),
                 answers);
