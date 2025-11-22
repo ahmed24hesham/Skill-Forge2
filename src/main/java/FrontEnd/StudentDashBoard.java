@@ -146,6 +146,16 @@ loadCourses();
 }
 
 
+    private void viewLessonContent() {
+       Lesson selectedLesson = listLessons.getSelectedValue();
+    if (selectedLesson == null) {
+        JOptionPane.showMessageDialog(this, "Select a Lesson first.");
+        return;
+    }
+        JOptionPane.showMessageDialog(this,selectedLesson.getContent());
+  
+}
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -168,6 +178,7 @@ loadCourses();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        ViewLessonContent = new javax.swing.JButton();
 
         StudentDashBoard.setBackground(new java.awt.Color(0, 0, 0));
         StudentDashBoard.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -263,6 +274,14 @@ loadCourses();
         jLabel3.setForeground(new java.awt.Color(255, 102, 0));
         jLabel3.setText("Lessons");
 
+        ViewLessonContent.setBackground(new java.awt.Color(255, 102, 0));
+        ViewLessonContent.setText("View lesson Content");
+        ViewLessonContent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ViewLessonContentActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout StudentDashBoardLayout = new javax.swing.GroupLayout(StudentDashBoard);
         StudentDashBoard.setLayout(StudentDashBoardLayout);
         StudentDashBoardLayout.setHorizontalGroup(
@@ -273,27 +292,19 @@ loadCourses();
                     .addGroup(StudentDashBoardLayout.createSequentialGroup()
                         .addGroup(StudentDashBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(StudentDashBoardLayout.createSequentialGroup()
-                                .addComponent(btnEnroll)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnViewLessons)
-                                .addGap(79, 79, 79)
-                                .addComponent(btnLogOut))
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel1)
+                                .addGap(179, 179, 179))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, StudentDashBoardLayout.createSequentialGroup()
+                                .addComponent(panelAvailable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(panelEnrolled, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addGroup(StudentDashBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(panelLessons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(StudentDashBoardLayout.createSequentialGroup()
-                                .addGroup(StudentDashBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(StudentDashBoardLayout.createSequentialGroup()
-                                        .addGap(6, 6, 6)
-                                        .addComponent(jLabel1)
-                                        .addGap(179, 179, 179))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, StudentDashBoardLayout.createSequentialGroup()
-                                        .addComponent(panelAvailable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(panelEnrolled, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                                .addGroup(StudentDashBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(panelLessons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(StudentDashBoardLayout.createSequentialGroup()
-                                        .addGap(142, 142, 142)
-                                        .addComponent(jLabel3)))))
+                                .addGap(142, 142, 142)
+                                .addComponent(jLabel3)))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(StudentDashBoardLayout.createSequentialGroup()
                         .addGroup(StudentDashBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -304,7 +315,16 @@ loadCourses();
                                 .addComponent(btnMarkComplete)
                                 .addGap(32, 32, 32)
                                 .addComponent(lblProgress)))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(StudentDashBoardLayout.createSequentialGroup()
+                        .addComponent(btnEnroll)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnViewLessons)
+                        .addGap(79, 79, 79)
+                        .addComponent(btnLogOut)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(ViewLessonContent)
+                        .addGap(58, 58, 58))))
         );
         StudentDashBoardLayout.setVerticalGroup(
             StudentDashBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -322,7 +342,8 @@ loadCourses();
                 .addGroup(StudentDashBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEnroll)
                     .addComponent(btnViewLessons)
-                    .addComponent(btnLogOut))
+                    .addComponent(btnLogOut)
+                    .addComponent(ViewLessonContent))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(StudentDashBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnMarkComplete)
@@ -418,9 +439,15 @@ if (!loggedStudent.getEnrolledCourses().contains(selectedCourse.getCourseId())) 
     mainFrame.repaint();
     }//GEN-LAST:event_btnLogOutActionPerformed
 
+    private void ViewLessonContentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViewLessonContentActionPerformed
+        // TODO add your handling code here:
+        viewLessonContent();
+    }//GEN-LAST:event_ViewLessonContentActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel StudentDashBoard;
+    private javax.swing.JButton ViewLessonContent;
     private javax.swing.JButton btnEnroll;
     private javax.swing.JButton btnLogOut;
     private javax.swing.JButton btnMarkComplete;
