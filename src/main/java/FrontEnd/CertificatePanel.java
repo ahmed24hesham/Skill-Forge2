@@ -18,9 +18,7 @@ public class CertificatePanel extends javax.swing.JPanel {
 
     private Certificate cert;
 private Srudent loggedStudent;
-    /**
-     * Creates new form CertificatePanel
-     */
+
     public CertificatePanel() {
         initComponents();
     }
@@ -132,13 +130,13 @@ private Srudent loggedStudent;
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-           // Get the MainFrame window
+      
     MainFrame mainFrame = (MainFrame) SwingUtilities.getWindowAncestor(this);
 
-    // Load the student dashboard again
+    
     StudentDashBoard dashboard = new StudentDashBoard(loggedStudent.getUsername());
 
-    // Switch screen
+
     mainFrame.setContentPane(dashboard);
     mainFrame.revalidate();
     mainFrame.repaint();
@@ -146,22 +144,22 @@ private Srudent loggedStudent;
 
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
      try {
-    // File name
+    
     String filename = "certificate_" + cert.getCertificateId() + ".pdf";
 
-    // Create PDF
+    
     com.itextpdf.text.Document pdfDoc = new com.itextpdf.text.Document();
     com.itextpdf.text.pdf.PdfWriter.getInstance(pdfDoc, new java.io.FileOutputStream(filename));
 
     pdfDoc.open();
 
-    // Title
+    
     com.itextpdf.text.Font titleFont = new com.itextpdf.text.Font(
             com.itextpdf.text.Font.FontFamily.HELVETICA, 20, com.itextpdf.text.Font.BOLD);
     pdfDoc.add(new com.itextpdf.text.Paragraph("Certificate of Completion", titleFont));
     pdfDoc.add(new com.itextpdf.text.Paragraph("\n"));
 
-    // Content
+    
     pdfDoc.add(new com.itextpdf.text.Paragraph("Certificate ID : " + cert.getCertificateId()));
     pdfDoc.add(new com.itextpdf.text.Paragraph("Student ID     : " + cert.getStudentId()));
     pdfDoc.add(new com.itextpdf.text.Paragraph("Course ID      : " + cert.getCourseId()));
@@ -169,7 +167,7 @@ private Srudent loggedStudent;
 
     pdfDoc.close();
 
-    // Show success message
+    
     JOptionPane.showMessageDialog(this,
             "Certificate saved as:\n" + filename,
             "Download Successful",
@@ -200,7 +198,5 @@ private void loadCertificateData() {
     lblCourseId.setText("Course ID: " + cert.getCourseId());
     lblIssueDate.setText("Issue Date: " + cert.getIssueDate());
 }
-private void downloadCertificate() {
 
-}
 }

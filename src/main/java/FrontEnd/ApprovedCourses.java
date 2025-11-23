@@ -8,6 +8,7 @@ import BackEnd.Course;
 import BackEnd.CourseDB;
 import java.awt.Color;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -15,102 +16,49 @@ import javax.swing.table.DefaultTableModel;
  * @author Asus
  */
 public class ApprovedCourses extends javax.swing.JPanel {
+  private Utility util;   // Utility instance
 
-    /**
-     * Creates new form ApprovedCourses
-     */
     public ApprovedCourses() {
         initComponents();
         setBackground(Color.LIGHT_GRAY);
 
-        // Load approved courses
-        ArrayList<Course> allCourses = new CourseDB("courses.json").load();
-        populateTable(allCourses);
-        
-        
-            jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
-    @Override
-    public void mouseClicked(java.awt.event.MouseEvent evt) {
-        int row = jTable1.getSelectedRow();
-        if (row >= 0) {
-            String courseId = jTable1.getValueAt(row, 0).toString();
-            String courseName = jTable1.getValueAt(row, 1).toString();
+        util = new Utility(jTable1); // Hand the table to Utility
 
-            // Show confirmation dialog
-            int option = javax.swing.JOptionPane.showOptionDialog(
-                null,
-                "Choose an action for this course:" + courseName + "?",
-                "Course Action",
-                javax.swing.JOptionPane.YES_NO_OPTION,
-                javax.swing.JOptionPane.QUESTION_MESSAGE,
-                null,
-                new Object[]{"PENDING", "REJECT"},
-                "APPROVE"
-            );
+        util.refresh("APPROVED"); // Load approved courses
 
-            if (option == 0) {
-                updateCourseStatus(courseId, "PENDING");
-                javax.swing.JOptionPane.showMessageDialog(null, courseName + " is now PENDING !");
-            } else if (option == 1) { 
-                updateCourseStatus(courseId, "REJECTED");
-                javax.swing.JOptionPane.showMessageDialog(null, courseName + "has been REJECTED!");
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+
+                int row = jTable1.getSelectedRow();
+                if (row < 0) return;
+
+                String courseId = jTable1.getValueAt(row, 0).toString();
+                String courseName = jTable1.getValueAt(row, 1).toString();
+
+                int option = JOptionPane.showOptionDialog(
+                        null,
+                        "Choose action for: " + courseName,
+                        "Course Action",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        new Object[]{"PENDING", "REJECT"},
+                        "PENDING"
+                );
+
+                if (option == 0) {
+                    util.updateCourseStatus(courseId, "PENDING");
+                    JOptionPane.showMessageDialog(null, courseName + " is now PENDING!");
+                } else if (option == 1) {
+                    util.updateCourseStatus(courseId, "REJECTED");
+                    JOptionPane.showMessageDialog(null, courseName + " has been REJECTED!");
+                }
+
+                util.refresh("APPROVED");
             }
-
-            refresh();
-        }
+        });
     }
-});  
-    }
-    private void updateCourseStatus(String courseId, String newStatus) {
-    ArrayList<Course> allCourses = new CourseDB("courses.json").load();
-    for (Course c : allCourses) {
-        if (c.getCourseId().equals(courseId)) {
-            c.setStatus(newStatus);
-            break;
-        }
-    }
-
-    new CourseDB("courses.json").save(allCourses);
-}
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
-public void populateTable(ArrayList<Course> courses) {
-    String[] columns = {"Course ID", "Course Name", "Instructor ID", "Description"};
-    DefaultTableModel model = new DefaultTableModel(columns, 0) {
-        @Override
-        public boolean isCellEditable(int row, int column) {
-            return false; // make table read-only
-        }
-    };
-
-    for (Course c : courses) {
-        if ("APPROVED".equalsIgnoreCase(c.getStatus())) {
-            model.addRow(new Object[]{
-                c.getCourseId(),
-                c.getTitle(),
-                c.getInstructorId(),
-                c.getDescription()
-            });
-        }
-    }
-
-    jTable1.setModel(model);
-}
-
-// Refresh the table (call this when a new course is approved)
-public void refresh() {
-    ArrayList<Course> allCourses = new CourseDB("courses.json").load(); // returns ArrayList<Course>
-    populateTable(allCourses);
-}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

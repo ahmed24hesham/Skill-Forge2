@@ -10,6 +10,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -19,89 +20,56 @@ import javax.swing.table.DefaultTableModel;
  * @author Asus
  */
 public class PendingCourses extends javax.swing.JPanel {
-
-    
-    private JTable table;
+    private Utility util;
 
     public PendingCourses() {
-            initComponents();
-            CourseDB courseDB = new CourseDB("courses.json");
-            List<Course> courses = courseDB.load();
-    setBackground(Color.LIGHT_GRAY);
+        initComponents();
+        setBackground(Color.LIGHT_GRAY);
 
-    if (courses == null) {
-        courses = new CourseDB("courses.json").load();
-    }
+        // Pass JTable to utility class
+        util = new Utility(jTable1);
 
-    populateTable(courses);
-    
-    jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
-    @Override
-    public void mouseClicked(java.awt.event.MouseEvent evt) {
-        int row = jTable1.getSelectedRow();
-        if (row >= 0) {
-            String courseId = jTable1.getValueAt(row, 0).toString();
-            String courseName = jTable1.getValueAt(row, 1).toString();
+        // Load ONLY pending courses
+        util.refresh("PENDING");
 
-            // Show confirmation dialog
-            int option = javax.swing.JOptionPane.showOptionDialog(
-                null,
-                "Do you want to APPROVE or REJECT the course: " + courseName + "?",
-                "Course Approval",
-                javax.swing.JOptionPane.YES_NO_OPTION,
-                javax.swing.JOptionPane.QUESTION_MESSAGE,
-                null,
-                new Object[]{"APPROVE", "REJECT"},
-                "APPROVE"
-            );
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
 
-            if (option == 0) { // APPROVE
-                updateCourseStatus(courseId, "APPROVED");
-                javax.swing.JOptionPane.showMessageDialog(null, courseName + " has been APPROVED!");
-            } else if (option == 1) { // REJECT
-                updateCourseStatus(courseId, "REJECTED");
-                javax.swing.JOptionPane.showMessageDialog(null, courseName + " has been REJECTED!");
+                int row = jTable1.getSelectedRow();
+                if (row < 0) return;
+
+                String courseId = jTable1.getValueAt(row, 0).toString();
+                String courseName = jTable1.getValueAt(row, 1).toString();
+
+                int option = JOptionPane.showOptionDialog(
+                        null,
+                        "Do you want to APPROVE or REJECT: " + courseName + "?",
+                        "Course Action",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        new Object[]{"APPROVE", "REJECT"},
+                        "APPROVE"
+                );
+
+                if (option == 0) { // APPROVE
+                    util.updateCourseStatus(courseId, "APPROVED");
+                    JOptionPane.showMessageDialog(null, courseName + " has been APPROVED!");
+                } else if (option == 1) { // REJECT
+                    util.updateCourseStatus(courseId, "REJECTED");
+                    JOptionPane.showMessageDialog(null, courseName + " has been REJECTED!");
+                }
+
+                // Reload PENDING only
+                util.refresh("PENDING");
             }
-
-            // Refresh the table to remove/update pending courses
-            refreshTable();
-        }
+        });
     }
-});  
-    }
-    private void updateCourseStatus(String courseId, String newStatus) {
-    ArrayList<Course> allCourses = new CourseDB("courses.json").load();
-    for (Course c : allCourses) {
-        if (c.getCourseId().equals(courseId)) {
-            c.setStatus(newStatus);
-            break;
-        }
-    }
-    // Save back to the JSON file
-    new CourseDB("courses.json").save(allCourses);
-}
-private void refreshTable() {
-    List<Course> allCourses = new CourseDB("courses.json").load();
-    populateTable(allCourses);
-}
 
-    private void populateTable(List<Course> courses) {
-        String[] columns = {"Course ID", "Course Name", "Instructor ID", "Description"};
-        DefaultTableModel model = new DefaultTableModel(columns, 0);
+    // Auto-generated Swing code...
 
-        for (Course c : courses) {
-            if ("PENDING".equals(c.getStatus())) {
-                model.addRow(new Object[]{
-                    c.getCourseId(),
-                    c.getTitle(),
-                    c.getInstructorId(),
-                    c.getDescription()
-                });
-            }
-        }
 
-        jTable1.setModel(model);
-    }
 
 
         
