@@ -84,7 +84,9 @@ loadCourses();
         if (c.getStudents().contains(loggedStudentId)) {
             enrolledModel.addElement(c);
         } else {
+            if ("APPROVED".equals(c.getStatus())){
             availableModel.addElement(c);
+            }
         }
     }
 
