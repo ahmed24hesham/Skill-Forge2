@@ -26,7 +26,63 @@ public class ApprovedCourses extends javax.swing.JPanel {
         // Load approved courses
         ArrayList<Course> allCourses = new CourseDB("courses.json").load();
         populateTable(allCourses);
+        
+        
+            jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+    @Override
+    public void mouseClicked(java.awt.event.MouseEvent evt) {
+        int row = jTable1.getSelectedRow();
+        if (row >= 0) {
+            String courseId = jTable1.getValueAt(row, 0).toString();
+            String courseName = jTable1.getValueAt(row, 1).toString();
+
+            // Show confirmation dialog
+            int option = javax.swing.JOptionPane.showOptionDialog(
+                null,
+                "Choose an action for this course:" + courseName + "?",
+                "Course Action",
+                javax.swing.JOptionPane.YES_NO_OPTION,
+                javax.swing.JOptionPane.QUESTION_MESSAGE,
+                null,
+                new Object[]{"PENDING", "REJECT"},
+                "APPROVE"
+            );
+
+            if (option == 0) {
+                updateCourseStatus(courseId, "PENDING");
+                javax.swing.JOptionPane.showMessageDialog(null, courseName + " is now PENDING !");
+            } else if (option == 1) { 
+                updateCourseStatus(courseId, "REJECTED");
+                javax.swing.JOptionPane.showMessageDialog(null, courseName + "has been REJECTED!");
+            }
+
+            refresh();
+        }
     }
+});  
+    }
+    private void updateCourseStatus(String courseId, String newStatus) {
+    ArrayList<Course> allCourses = new CourseDB("courses.json").load();
+    for (Course c : allCourses) {
+        if (c.getCourseId().equals(courseId)) {
+            c.setStatus(newStatus);
+            break;
+        }
+    }
+
+    new CourseDB("courses.json").save(allCourses);
+}
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
 public void populateTable(ArrayList<Course> courses) {
     String[] columns = {"Course ID", "Course Name", "Instructor ID", "Description"};
     DefaultTableModel model = new DefaultTableModel(columns, 0) {

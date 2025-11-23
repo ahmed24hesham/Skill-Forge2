@@ -75,6 +75,21 @@ jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
     }
 });
 
+        jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
+            contentPanel.removeAll();  // remove previous content
+            RejectedCourses rejectedCourses = new RejectedCourses();
+            contentPanel.add(rejectedCourses, BorderLayout.CENTER);
+            contentPanel.revalidate();
+            contentPanel.repaint();
+        }
+        
+        
+        
+        
+    });
+
+
     
 }
 
@@ -94,6 +109,7 @@ jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
         contentPanel = new javax.swing.JPanel();
 
         setBackground(new java.awt.Color(255, 255, 255));
@@ -118,6 +134,9 @@ jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
         jLabel4.setForeground(new java.awt.Color(255, 153, 0));
         jLabel4.setText("logout");
 
+        jLabel5.setForeground(new java.awt.Color(255, 153, 0));
+        jLabel5.setText("Rejected Courses");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -128,7 +147,8 @@ jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel4))
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5))
                 .addContainerGap(877, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -140,9 +160,11 @@ jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
                 .addComponent(jLabel2)
                 .addGap(70, 70, 70)
                 .addComponent(jLabel3)
-                .addGap(60, 60, 60)
+                .addGap(69, 69, 69)
+                .addComponent(jLabel5)
+                .addGap(67, 67, 67)
                 .addComponent(jLabel4)
-                .addContainerGap(485, Short.MAX_VALUE))
+                .addContainerGap(393, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -202,6 +224,7 @@ jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables

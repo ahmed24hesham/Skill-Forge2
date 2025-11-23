@@ -99,6 +99,6 @@ public class Course {
 
     @Override
     public String toString() {
-        return title + " (" + courseId + ")";
+        return title + " (" + courseId + " " + status + ")" ;
     }
 }
