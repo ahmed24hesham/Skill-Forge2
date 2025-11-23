@@ -127,12 +127,13 @@ public class Quiz extends JPanel {
         }
 
         JOptionPane.showMessageDialog(this, "Your score: " + score + "%");
-showCorrectAnswers();
 
         
 // Mark lesson passed ONLY IF score >= passing score
 if (score >= lesson.getQuiz().getPassingScore()) {
     lesson.setQuizPassed(true);
+    showCorrectAnswers();
+
 
     // Update JSON
     CourseDB courseDB = new CourseDB("courses.json");

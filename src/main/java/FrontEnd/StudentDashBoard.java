@@ -123,12 +123,18 @@ loadCourses();
 }
     
      private void viewCourseDescription() {
+               Course selectedAvailable = listAvailable.getSelectedValue();
+    Course selectedEnrolled = listEnrolled.getSelectedValue();
 
-    if (selectedCourse == null) {
+    Course selected = (selectedAvailable != null) ? selectedAvailable : selectedEnrolled;
+
+    if (selected == null) {
         JOptionPane.showMessageDialog(this, "Select a course first.");
         return;
     }
-        JOptionPane.showMessageDialog(this,selectedCourse.getDescription());
+
+    JOptionPane.showMessageDialog(this, selected.getDescription());
+
   
 }
 
