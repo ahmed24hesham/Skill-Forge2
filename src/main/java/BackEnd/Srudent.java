@@ -106,12 +106,13 @@ public boolean hasPassedLesson(String lessonId) {
         }
     }
     return true;
-}
-    public ArrayList<Certificate> getCertificates() {
+    }
+public ArrayList<Certificate> getCertificates() {
     return certificates;
 }
-    public void addCertificate(Certificate c) {
-    certificates.add(c);
+
+public void addCertificate(Certificate cert) {
+    certificates.add(cert);
 }
     
 }
