@@ -9,6 +9,7 @@ public class Lesson {
     private String content;
     private ArrayList<String> resources;   // for optional material you wanna add
     private Quiz quiz;
+    private boolean quizPassed;
     public Lesson( String title, String content,Quiz quiz) {
         IDGenerator idd = new IDGenerator();
         
@@ -66,6 +67,15 @@ public class Lesson {
         this.resources.remove(resource);
     }
 
+    
+    public boolean isQuizPassed() {
+    return quizPassed;
+}
+
+public void setQuizPassed(boolean quizPassed) {
+    this.quizPassed = quizPassed;
+}
+    
     @Override
     public String toString() {
         return title;

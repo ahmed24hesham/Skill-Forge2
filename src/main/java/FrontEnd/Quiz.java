@@ -127,16 +127,33 @@ public class Quiz extends JPanel {
         }
 
         JOptionPane.showMessageDialog(this, "Your score: " + score + "%");
+showCorrectAnswers();
 
-        // Show correct answers in green, wrong in red
-        showCorrectAnswers();
+        
+// Mark lesson passed ONLY IF score >= passing score
+if (score >= lesson.getQuiz().getPassingScore()) {
+    lesson.setQuizPassed(true);
 
-        int ok = JOptionPane.showConfirmDialog(
-    this,
-    "Your score: " + score + "%. View correct answers and click OK to return.",
-    "Quiz Complete",
-    JOptionPane.OK_CANCEL_OPTION
-);
+    // Update JSON
+    CourseDB courseDB = new CourseDB("courses.json");
+    ArrayList<Course> allCourses = courseDB.load();
+
+    // Find the course & lesson and update it
+    for (Course c : allCourses) {
+        if (c.getCourseId().equals(course.getCourseId())) {
+            for (Lesson l : c.getLessons()) {
+                if (l.getLessonId().equals(lesson.getLessonId())) {
+                    l.setQuizPassed(true);
+                }
+            }
+        }
+    }
+    courseDB.save(allCourses);
+
+    JOptionPane.showMessageDialog(this, "✔ Lesson Unlocked!");
+} else {
+    JOptionPane.showMessageDialog(this, "❌ You did not pass. Next lesson is locked.");
+}
 
 goToDashboard();
     }

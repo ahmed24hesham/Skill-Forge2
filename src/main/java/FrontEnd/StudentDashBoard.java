@@ -86,7 +86,7 @@ loadCourses();
         } else {
             if ("APPROVED".equals(c.getStatus())){
             availableModel.addElement(c);
-            }
+                }
         }
     }
 
@@ -95,14 +95,42 @@ loadCourses();
     }
     
     private void loadLessons() {
-         lessonModel.clear();
+    lessonModel.clear();
     if (selectedCourse == null) return;
 
-    for (Lesson l : selectedCourse.getLessons()) {
-        lessonModel.addElement(l);
+    ArrayList<Lesson> lessons = selectedCourse.getLessons();
+
+    for (int i = 0; i < lessons.size(); i++) {
+        Lesson lesson = lessons.get(i);
+
+        boolean unlocked = true;
+
+        // Check if previous lesson was passed
+        if (i > 0) {
+            Lesson previous = lessons.get(i - 1);
+            unlocked = previous.isQuizPassed();
+        }
+
+        // Modify display text before adding
+        if (!unlocked) {
+            lesson.setTitle(lesson.getTitle() + " (Locked)");
+        }
+
+        lessonModel.addElement(lesson);
     }
+
     updateProgress();
+}
+    
+     private void viewCourseDescription() {
+
+    if (selectedCourse == null) {
+        JOptionPane.showMessageDialog(this, "Select a course first.");
+        return;
     }
+        JOptionPane.showMessageDialog(this,selectedCourse.getDescription());
+  
+}
 
     private void enrollInCourse() {
          Course sel = listAvailable.getSelectedValue();
@@ -187,6 +215,7 @@ loadCourses();
         ViewLessonContent = new javax.swing.JButton();
         btnTakeQuiz = new javax.swing.JButton();
         Certificate = new javax.swing.JButton();
+        btnShowDescription = new javax.swing.JButton();
 
         StudentDashBoard.setBackground(new java.awt.Color(0, 0, 0));
         StudentDashBoard.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -298,6 +327,14 @@ loadCourses();
             }
         });
 
+        btnShowDescription.setBackground(new java.awt.Color(255, 102, 0));
+        btnShowDescription.setText("show description");
+        btnShowDescription.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnShowDescriptionActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout StudentDashBoardLayout = new javax.swing.GroupLayout(StudentDashBoard);
         StudentDashBoard.setLayout(StudentDashBoardLayout);
         StudentDashBoardLayout.setHorizontalGroup(
@@ -340,7 +377,9 @@ loadCourses();
                                         .addComponent(btnEnroll)
                                         .addGap(18, 18, 18)
                                         .addComponent(btnViewLessons)))
-                                .addGap(79, 79, 79)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnShowDescription)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnLogOut)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(ViewLessonContent)))
@@ -363,7 +402,8 @@ loadCourses();
                     .addComponent(btnEnroll)
                     .addComponent(btnViewLessons)
                     .addComponent(btnLogOut)
-                    .addComponent(ViewLessonContent))
+                    .addComponent(ViewLessonContent)
+                    .addComponent(btnShowDescription))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(StudentDashBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRefresh)
@@ -377,7 +417,7 @@ loadCourses();
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(StudentDashBoard, javax.swing.GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE)
+            .addComponent(StudentDashBoard, javax.swing.GroupLayout.PREFERRED_SIZE, 584, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -428,20 +468,30 @@ loadCourses();
     }//GEN-LAST:event_ViewLessonContentActionPerformed
 
     private void btnTakeQuizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTakeQuizActionPerformed
-        selectedLesson = listLessons.getSelectedValue();
-        selectedCourse = listEnrolled.getSelectedValue();
+      selectedLesson = listLessons.getSelectedValue();
+    selectedCourse = listEnrolled.getSelectedValue();
 
     if (selectedCourse == null) {
         JOptionPane.showMessageDialog(this, "Select a course first.");
         return;
     }
-
     if (selectedLesson == null) {
         JOptionPane.showMessageDialog(this, "Select a lesson first.");
         return;
     }
 
-    // Open QuizPanel inside MainFrame
+    // Check lock
+    int index = selectedCourse.getLessons().indexOf(selectedLesson);
+    if (index > 0) {
+        Lesson previous = selectedCourse.getLessons().get(index - 1);
+        if (!previous.isQuizPassed()) {
+            JOptionPane.showMessageDialog(this,
+                "You must PASS the previous lesson's quiz to unlock this one.");
+            return;
+        }
+    }
+
+    // Open Quiz panel
     MainFrame frame = (MainFrame) SwingUtilities.getWindowAncestor(this);
     frame.setContentPane(new FrontEnd.Quiz(selectedLesson, loggedStudent, selectedCourse));
     frame.revalidate();
@@ -505,6 +555,11 @@ loadCourses();
     StudentDashBoard.repaint();
     }//GEN-LAST:event_CertificateActionPerformed
 
+    private void btnShowDescriptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowDescriptionActionPerformed
+        // TODO add your handling code here:
+        viewCourseDescription();
+    }//GEN-LAST:event_btnShowDescriptionActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Certificate;
@@ -513,6 +568,7 @@ loadCourses();
     private javax.swing.JButton btnEnroll;
     private javax.swing.JButton btnLogOut;
     private javax.swing.JButton btnRefresh;
+    private javax.swing.JButton btnShowDescription;
     private javax.swing.JButton btnTakeQuiz;
     private javax.swing.JButton btnViewLessons;
     private javax.swing.JLabel jLabel1;
