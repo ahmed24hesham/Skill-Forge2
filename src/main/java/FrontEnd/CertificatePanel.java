@@ -146,31 +146,42 @@ private Srudent loggedStudent;
 
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
      try {
-        // File name
-        String filename = "certificate_" + cert.getCertificateId() + ".txt";
+    // File name
+    String filename = "certificate_" + cert.getCertificateId() + ".pdf";
 
-        // Write file
-        java.io.FileWriter writer = new java.io.FileWriter(filename);
-        writer.write("===== Certificate of Completion =====\n\n");
-        writer.write("Certificate ID : " + cert.getCertificateId() + "\n");
-        writer.write("Student ID     : " + cert.getStudentId() + "\n");
-        writer.write("Course ID      : " + cert.getCourseId() + "\n");
-        writer.write("Issue Date     : " + cert.getIssueDate() + "\n");
-        writer.close();
+    // Create PDF
+    com.itextpdf.text.Document pdfDoc = new com.itextpdf.text.Document();
+    com.itextpdf.text.pdf.PdfWriter.getInstance(pdfDoc, new java.io.FileOutputStream(filename));
 
-        // Show message
-        JOptionPane.showMessageDialog(this,
-                "Certificate saved as:\n" + filename,
-                "Download Successful",
-                JOptionPane.INFORMATION_MESSAGE);
+    pdfDoc.open();
 
-    } catch (Exception ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(this,
-                "Error downloading certificate.",
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
-    }
+    // Title
+    com.itextpdf.text.Font titleFont = new com.itextpdf.text.Font(
+            com.itextpdf.text.Font.FontFamily.HELVETICA, 20, com.itextpdf.text.Font.BOLD);
+    pdfDoc.add(new com.itextpdf.text.Paragraph("Certificate of Completion", titleFont));
+    pdfDoc.add(new com.itextpdf.text.Paragraph("\n"));
+
+    // Content
+    pdfDoc.add(new com.itextpdf.text.Paragraph("Certificate ID : " + cert.getCertificateId()));
+    pdfDoc.add(new com.itextpdf.text.Paragraph("Student ID     : " + cert.getStudentId()));
+    pdfDoc.add(new com.itextpdf.text.Paragraph("Course ID      : " + cert.getCourseId()));
+    pdfDoc.add(new com.itextpdf.text.Paragraph("Issue Date     : " + cert.getIssueDate()));
+
+    pdfDoc.close();
+
+    // Show success message
+    JOptionPane.showMessageDialog(this,
+            "Certificate saved as:\n" + filename,
+            "Download Successful",
+            JOptionPane.INFORMATION_MESSAGE);
+
+} catch (Exception ex) {
+    ex.printStackTrace();
+    JOptionPane.showMessageDialog(this,
+            "Error downloading certificate.",
+            "Error",
+            JOptionPane.ERROR_MESSAGE);
+}
     }//GEN-LAST:event_btnDownloadActionPerformed
 
 
