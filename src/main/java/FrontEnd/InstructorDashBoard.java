@@ -161,40 +161,27 @@ private void loadLessons() {
 
     return totalScore * 1.0 / count;
 }
-public double getCourseAverageScore(String courseId) {
+public ArrayList<Double> getCourseAverageScores(String courseId) {
     ArrayList<Course> courses = new CourseDB("courses.json").load();
-    ArrayList<Srudent> students = new StudentDB("users.json").load();
-
     Course target = null;
+    
     for (Course c : courses) {
         if (c.getCourseId().equals(courseId)) {
             target = c;
             break;
         }
     }
-    if (target == null) return -1;
+    if (target == null) return new ArrayList<>(); // لو الكورس مش موجود
 
-    ArrayList<String> lessons = new ArrayList<>();
-    for (Lesson l : target.getLessons()) {
-        lessons.add(l.getLessonId());
+    ArrayList<Double> averages = new ArrayList<>();
+    for (Lesson lesson : target.getLessons()) {
+        double avg = getLessonQuizAverage(lesson.getLessonId());
+        averages.add(avg);
     }
 
-    int totalScores = 0;
-    int count = 0;
-
-    for (Srudent s : students) {
-        for (QuizResult qr : s.getQuizResults()) {
-            if (lessons.contains(qr.getLessonId())) {
-                totalScores += qr.getScore();
-                count++;
-            }
-        }
-    }
-
-    if (count == 0) return 0;
-
-    return (double) totalScores / count;
+    return averages;
 }
+
 public double getLessonCompletionPercentage(String courseId, String lessonId) {
      StudentDB studentDB = new StudentDB("users.json");
     ArrayList<Srudent> allStudents = studentDB.load();
@@ -889,27 +876,30 @@ if (selectedCourse == null || selectedLesson == null) {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-         if (selectedCourse == null) {
+   if (selectedCourse == null) {
         JOptionPane.showMessageDialog(this, "Select a course first.");
         return;
     }
-         double average = getCourseAverageScore(selectedCourse.getCourseId());
-         String formatted = String.format("%.2f", average);
-  JOptionPane.showMessageDialog(this,
-        "Average Marks Score  Per Course= " + formatted);
+
+    ArrayList<Double> average = getCourseAverageScores(selectedCourse.getCourseId());
+    ArrayList<String> lessonTitles = new ArrayList<>();
+    for (Lesson l : selectedCourse.getLessons()) {
+        lessonTitles.add(l.getTitle());
+    }
+    QuizAverage frame = new QuizAverage(average, lessonTitles);
+    frame.setVisible(true);
         
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
-          if (selectedCourse == null) {
+       if (selectedCourse == null) {
         JOptionPane.showMessageDialog(this, "Select a course first.");
         return;
     }
-         double average = getCourseCompletionPercentage(selectedCourse.getCourseId());
-         String formatted = String.format("%.2f", average);
-  JOptionPane.showMessageDialog(this,
-        "Completon percantage= " + formatted);
+
+    CompletionCourse frame = new CompletionCourse(this, selectedCourse);
+    frame.setVisible(true);
         
     }//GEN-LAST:event_jButton7ActionPerformed
 
